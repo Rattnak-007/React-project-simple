@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,265 +7,281 @@ import {
   Headphones,
   Monitor,
   Gamepad2,
-  Keyboard,
+  Play,
+  Pause,
+  ArrowRight,
+  ShoppingCart,
 } from "lucide-react";
 
 const slides = [
   {
     id: 1,
     image:
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=600&fit=crop",
     title: "Ultimate Gaming Setup",
     subtitle: "Mechanical Keyboards & Gaming Mice",
     description: "Precision-engineered peripherals for competitive edge",
     button: "Explore Gaming Gear",
-    icon: <Gamepad2 className="w-8 h-8" />,
+    icon: <Gamepad2 className="w-6 h-6" />,
     color: "from-purple-600 to-pink-600",
-    price: "Starting at $89",
+    rating: "4.9",
+    price: "$299.99",
   },
   {
     id: 2,
     image:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=1600&q=80",
+      "https://i.pinimg.com/736x/f1/e7/fb/f1e7fbe7e3631d2c37292f2ec0447cd7.jpg",
     title: "Professional Workspace",
     subtitle: "4K Monitors & Ergonomic Solutions",
     description: "Transform your productivity with premium displays",
     button: "Shop Monitors",
-    icon: <Monitor className="w-8 h-8" />,
+    icon: <Monitor className="w-6 h-6" />,
     color: "from-blue-600 to-cyan-600",
-    price: "From $299",
+    rating: "4.8",
+    price: "$899.99",
   },
   {
     id: 3,
     image:
-      "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1600&q=80",
+      "https://i.pinimg.com/1200x/37/d5/d2/37d5d2809d8d76f0d377829209034eb1.jpg",
     title: "Audiophile Experience",
     subtitle: "Premium Headsets & Studio Microphones",
     description: "Crystal-clear audio for gaming and content creation",
     button: "Discover Audio",
-    icon: <Headphones className="w-8 h-8" />,
+    icon: <Headphones className="w-6 h-6" />,
     color: "from-orange-600 to-red-600",
-    price: "Starting $149",
+    rating: "4.7",
+    price: "$449.99",
   },
   {
     id: 4,
     image:
-      "https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=1600&q=80",
+      "https://i.pinimg.com/1200x/07/94/9c/07949cea7a2a88895efc604fe6ca222c.jpg",
     title: "RGB Lighting Ecosystem",
     subtitle: "Smart LED Strips & Custom Lighting",
     description: "Create the perfect ambiance for your battlestation",
     button: "Light It Up",
-    icon: <Zap className="w-8 h-8" />,
+    icon: <Zap className="w-6 h-6" />,
     color: "from-green-600 to-emerald-600",
-    price: "From $59",
+    rating: "4.6",
+    price: "$159.99",
   },
 ];
 
-export default function PCAccessorySlideshow() {
+export default function ModernPCAccessorySlideshow() {
   const [current, setCurrent] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
-  // Auto slide with progress bar
   useEffect(() => {
     if (!isPlaying) return;
 
-    const interval = setInterval(() => {
+    const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          setCurrent((prev) => (prev + 1) % slides.length);
-          return 0;
+          return 100;
         }
         return prev + 2;
       });
     }, 100);
 
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+    const slideInterval = setInterval(() => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setCurrent((prevCurrent) => (prevCurrent + 1) % slides.length);
+        setIsVisible(true);
+        setProgress(0);
+      }, 150);
+    }, 5000);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(slideInterval);
+    };
+  }, [isPlaying, slides.length]);
 
   const prevSlide = () => {
-    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    setIsVisible(false);
+    setTimeout(() => {
+      setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+      setIsVisible(true);
+    }, 150);
     setProgress(0);
   };
 
   const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % slides.length);
+    setIsVisible(false);
+    setTimeout(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+      setIsVisible(true);
+    }, 150);
     setProgress(0);
   };
 
   const goToSlide = (index) => {
-    setCurrent(index);
+    if (index === current) return;
+    setIsVisible(false);
+    setTimeout(() => {
+      setCurrent(index);
+      setIsVisible(true);
+    }, 150);
     setProgress(0);
   };
 
   return (
-    <div className="relative w-full h-[500px] md:h-[670px] overflow-hidden shadow-2xl bg-black">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={slides[current].id}
-          initial={{ opacity: 0, scale: 1.1, rotateY: -10 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          exit={{ opacity: 0, scale: 0.9, rotateY: 10 }}
-          transition={{ duration: 0.7, ease: "easeInOut" }}
-          className="absolute inset-0 w-full h-full"
-        >
-          {/* Background Image with Parallax Effect */}
-          <motion.div
-            initial={{ scale: 1.2 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 8, ease: "linear" }}
-            className="absolute inset-0 w-full h-full"
-            style={{
-              backgroundImage: `url(${slides[current].image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
+    <div className="relative w-full mt-4 max-w-7xl mx-auto h-[630px] overflow-hidden rounded-3xl shadow-2xl bg-gray-900">
+      {/* Background Image */}
+      <div
+        className={`absolute inset-0 w-full h-full transition-all duration-700 ease-in-out ${
+          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-105"
+        }`}
+        style={{
+          backgroundImage: `url(${slides[current].image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
 
-          {/* Enhanced Gradient Overlay */}
+      {/* Gradient overlay */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${slides[current].color} opacity-90 mix-blend-overlay transition-all duration-700`}
+      />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-center p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Text content */}
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${slides[current].color} opacity-80`}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
-
-          {/* Content Container */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6 md:px-12">
-            {/* Icon Animation */}
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.3, duration: 0.6, type: "spring" }}
-              className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30"
-            >
+            className={`text-white space-y-6 transition-all duration-500 ${
+              isVisible
+                ? "opacity-100 translate-x-0 translate-y-0"
+                : "opacity-0 -translate-x-8 translate-y-4"
+            }`}
+          >
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
               {slides[current].icon}
-            </motion.div>
+              <span className="font-medium">{slides[current].subtitle}</span>
+            </div>
 
-            {/* Title */}
-            <motion.h1
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
-            >
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
               {slides[current].title}
-            </motion.h1>
+            </h1>
 
-            {/* Subtitle */}
-            <motion.p
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg md:text-2xl mb-3 md:mb-4 font-semibold text-gray-100"
-            >
-              {slides[current].subtitle}
-            </motion.p>
-
-            {/* Description */}
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-sm md:text-lg mb-4 md:mb-6 text-gray-200 max-w-2xl"
-            >
+            <p className="text-lg text-gray-200 max-w-md">
               {slides[current].description}
-            </motion.p>
+            </p>
 
-            {/* Price */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.7, duration: 0.4 }}
-              className="flex items-center gap-2 mb-6 md:mb-8 px-4 py-2 bg-yellow-500 text-black rounded-full font-bold"
-            >
-              <Star className="w-4 h-4 fill-current" />
-              <span>{slides[current].price}</span>
-            </motion.div>
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2 bg-black/30 px-3 py-1 rounded-full">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm font-medium">
+                  {slides[current].rating}
+                </span>
+              </div>
+              <div className="text-lg font-semibold">
+                {slides[current].price}
+              </div>
+            </div>
 
-            {/* CTA Button */}
-            <motion.button
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-lg rounded-2xl shadow-2xl transition-all duration-300 hover:bg-gray-100 border-2 border-white/20 backdrop-blur-sm"
-            >
-              {slides[current].button}
-            </motion.button>
+            <div className="flex gap-4 mt-6">
+              <button className="px-6 py-3 bg-white text-gray-900 font-bold rounded-xl flex items-center gap-2 group hover:scale-105 transition-transform duration-200">
+                <ShoppingCart className="w-5 h-5" />
+                {slides[current].button}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="p-3 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-xl border border-white/20 transition-all"
+              >
+                {isPlaying ? (
+                  <Pause className="w-5 h-5" />
+                ) : (
+                  <Play className="w-5 h-5" />
+                )}
+              </button>
+            </div>
           </div>
-        </motion.div>
-      </AnimatePresence>
 
-      {/* Navigation Arrows */}
+          {/* Image content */}
+          <div
+            className={`relative hidden lg:block transition-all duration-700 ${
+              isVisible
+                ? "opacity-100 scale-100 rotate-0"
+                : "opacity-0 scale-90 -rotate-3"
+            }`}
+          >
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-700">
+              <img
+                src={slides[current].image}
+                alt={slides[current].title}
+                className="w-full h-80 object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Controls */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-6 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white p-4 md:p-5 rounded-2xl transition-all duration-300 shadow-lg border border-white/20 group"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 shadow-lg border border-white/20 z-20 group"
       >
         <ChevronLeft
-          size={32}
+          size={24}
           className="group-hover:-translate-x-1 transition-transform"
         />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-6 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white p-4 md:p-5 rounded-2xl transition-all duration-300 shadow-lg border border-white/20 group"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 shadow-lg border border-white/20 z-20 group"
       >
         <ChevronRight
-          size={32}
+          size={24}
           className="group-hover:translate-x-1 transition-transform"
         />
       </button>
 
-      {/* Play/Pause Button */}
-      <button
-        onClick={() => setIsPlaying(!isPlaying)}
-        className="absolute top-6 right-6 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 border border-white/20"
-      >
-        {isPlaying ? (
-          <div className="w-4 h-4 flex gap-1">
-            <div className="w-1.5 h-4 bg-white rounded-full"></div>
-            <div className="w-1.5 h-4 bg-white rounded-full"></div>
-          </div>
-        ) : (
-          <div className="w-0 h-0 border-l-[12px] border-l-white border-y-[6px] border-y-transparent ml-1"></div>
-        )}
-      </button>
-
-      {/* Enhanced Dot Indicators with Progress */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4">
+      {/* Dots */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
             className="relative group"
+            aria-label={`Go to slide ${index + 1}`}
           >
             <div
-              className={`w-4 h-4 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 current === index
                   ? "bg-white shadow-lg scale-125"
                   : "bg-white/40 hover:bg-white/60"
               }`}
             />
             {current === index && (
-              <div
-                className="absolute inset-0 rounded-full bg-white/30 scale-150"
-                style={{
-                  background: `conic-gradient(white ${
-                    progress * 3.6
-                  }deg, transparent 0deg)`,
-                }}
-              />
+              <div className="absolute -inset-1.5 rounded-full border border-white/50" />
             )}
           </button>
         ))}
       </div>
 
-      {/* Slide Counter */}
-      <div className="absolute bottom-8 right-8 bg-black/40 backdrop-blur-sm text-white px-4 py-2 rounded-full font-semibold border border-white/20">
+      {/* Progress */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 z-20">
+        <div
+          className={`h-full transition-all duration-100 ${
+            current % 2 === 0 ? "bg-white" : "bg-cyan-300"
+          }`}
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      {/* Counter */}
+      <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full font-medium border border-white/20 z-20">
         {current + 1} / {slides.length}
       </div>
     </div>

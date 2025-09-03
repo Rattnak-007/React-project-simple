@@ -35,18 +35,14 @@ const exploreItems = [
     icon: <Headphones size={32} />,
   },
   {
-    title: "About Lenovo",
+    title: "About",
     icon: <Laptop size={32} />,
-  },
-  {
-    title: "Deals",
-    icon: <Tag size={32} />,
   },
 ];
 
 export default function Explore() {
   return (
-    <section className="max-w-8xl mx-auto px-4 py-8">
+    <section className="max-w-7xl mx-auto px-4 py-8">
       <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-8 text-center">
         Explore
       </h2>
