@@ -387,7 +387,7 @@ export default function PremiumNavbar() {
               ].map((link, index) => (
                 <a
                   key={index}
-                  href="#"
+                  href="../../Gamming/Gamming/index.jsx"
                   className="relative flex items-center gap-2 px-4 py-2 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all font-medium group"
                 >
                   <span>{link.name}</span>
