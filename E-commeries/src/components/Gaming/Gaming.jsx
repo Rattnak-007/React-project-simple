@@ -1,476 +1,1023 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Filter,
+  Grid,
+  List,
+  ChevronDown,
+  Star,
+  Heart,
+  ShoppingCart,
+  Eye,
+  Zap,
+  Shield,
+  Truck,
+  Award,
+  X,
+  Search,
+  SlidersHorizontal,
+  ArrowUpDown,
+  Keyboard,
+  Mouse,
+  Headphones,
+  Monitor,
+  Gamepad2,
+  Webcam,
+  Speaker,
+  Usb,
+  Mic,
+} from "lucide-react";
 
-const categories = [
+const products = [
   {
-    name: "Keyboards",
-    items: [
-      {
-        id: 1,
-        name: "Corsair K95 RGB Platinum XT",
-        image:
-          "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=400&q=80",
-        price: "$199.99",
-        detail:
-          "Mechanical gaming keyboard with RGB lighting, macro keys, and Cherry MX Speed switches for ultra-fast response times.",
-      },
-      {
-        id: 2,
-        name: "Razer Huntsman Elite",
-        image:
-          "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80",
-        price: "$179.99",
-        detail:
-          "Opto-mechanical switches with light-based actuation, plush wrist rest, and Chroma RGB lighting.",
-      },
-      {
-        id: 3,
-        name: "SteelSeries Apex Pro",
-        image:
-          "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=400&q=80",
-        price: "$159.99",
-        detail:
-          "Adjustable actuation mechanical switches, OLED smart display, and aircraft-grade aluminum frame.",
-      },
-      {
-        id: 4,
-        name: "Logitech G915 TKL",
-        image:
-          "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=400&q=80",
-        price: "$189.99",
-        detail:
-          "Wireless tenkeyless design with low-profile GL switches and 40-hour battery life.",
-      },
+    id: 1,
+    name: "Corsair K95 RGB Platinum XT",
+    category: "Gaming Keyboards",
+    categoryIcon: <Keyboard size={16} />,
+    price: 199.99,
+    originalPrice: 249.99,
+    rating: 4.8,
+    reviews: 2547,
+    image:
+      "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=400&q=80",
+    brand: "Corsair",
+    inStock: true,
+    discount: 20,
+    badges: ["Bestseller", "Gaming"],
+    features: [
+      "Cherry MX Speed",
+      "RGB Backlit",
+      "Macro Keys",
+      "USB Passthrough",
     ],
+    specs: {
+      switches: "Cherry MX Speed Silver",
+      backlight: "Per-key RGB",
+      connectivity: "USB-C",
+      warranty: "2 years",
+    },
   },
   {
-    name: "Mice",
-    items: [
-      {
-        id: 5,
-        name: "Logitech G Pro X Superlight",
-        image:
-          "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80",
-        price: "$129.99",
-        detail:
-          "Ultra-lightweight 63g wireless gaming mouse with HERO 25K sensor and 70-hour battery life.",
-      },
-      {
-        id: 6,
-        name: "Razer DeathAdder V3 Pro",
-        image:
-          "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=400&q=80",
-        price: "$149.99",
-        detail:
-          "Focus Pro 30K sensor, 63g lightweight design, 90-hour battery, and ergonomic right-handed shape.",
-      },
-      {
-        id: 7,
-        name: "SteelSeries Rival 650",
-        image:
-          "https://images.unsplash.com/photo-1563297007-0686b6ed3bdb?auto=format&fit=crop&w=400&q=80",
-        price: "$89.99",
-        detail:
-          "Dual sensor system with lift-off detection, customizable weight system, and 256 RGB zones.",
-      },
-      {
-        id: 8,
-        name: "Corsair M65 RGB Elite",
-        image:
-          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80",
-        price: "$79.99",
-        detail:
-          "18,000 DPI optical sensor, aircraft-grade aluminum frame, and customizable RGB backlighting.",
-      },
-    ],
+    id: 2,
+    name: "Logitech MX Master 3S",
+    category: "Professional Mice",
+    categoryIcon: <Mouse size={16} />,
+    price: 99.99,
+    originalPrice: 119.99,
+    rating: 4.7,
+    reviews: 1832,
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80",
+    brand: "Logitech",
+    inStock: true,
+    discount: 17,
+    badges: ["Professional", "Ergonomic"],
+    features: ["8000 DPI", "Multi-device", "Quick Charging", "Silent Clicks"],
+    specs: {
+      sensor: "Darkfield High Precision",
+      dpi: "8000 DPI",
+      battery: "70 days",
+      connectivity: "Bluetooth/USB",
+    },
   },
   {
-    name: "Headsets",
-    items: [
-      {
-        id: 9,
-        name: "SteelSeries Arctis 7P",
-        image:
-          "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80",
-        price: "$149.99",
-        detail:
-          "Wireless gaming headset with 24-hour battery, ClearCast noise-canceling microphone, and DTS 7.1 surround.",
-      },
-      {
-        id: 10,
-        name: "HyperX Cloud II",
-        image:
-          "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=400&q=80",
-        price: "$99.99",
-        detail:
-          "7.1 virtual surround sound, memory foam ear cushions, detachable noise-cancelling microphone.",
-      },
-      {
-        id: 11,
-        name: "Razer BlackShark V2 Pro",
-        image:
-          "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=400&q=80",
-        price: "$179.99",
-        detail:
-          "Wireless esports headset with THX 7.1 surround, titanium drivers, and advanced passive noise cancellation.",
-      },
-      {
-        id: 12,
-        name: "Corsair HS80 RGB Wireless",
-        image:
-          "https://images.unsplash.com/photo-1577174881658-0f30ed549adc?auto=format&fit=crop&w=400&q=80",
-        price: "$139.99",
-        detail:
-          "Premium wireless gaming headset with Dolby Atmos, broadcast-grade microphone, and 20-hour battery.",
-      },
+    id: 3,
+    name: "SteelSeries Arctis 7P",
+    category: "Gaming Headsets",
+    categoryIcon: <Headphones size={16} />,
+    price: 149.99,
+    originalPrice: 179.99,
+    rating: 4.6,
+    reviews: 3241,
+    image:
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80",
+    brand: "SteelSeries",
+    inStock: true,
+    discount: 17,
+    badges: ["Wireless", "Gaming"],
+    features: [
+      "2.4GHz Wireless",
+      "24hr Battery",
+      "ClearCast Mic",
+      "DTS Headphone:X",
     ],
+    specs: {
+      driver: "40mm Neodymium",
+      frequency: "20-20,000 Hz",
+      battery: "24 hours",
+      weight: "312g",
+    },
   },
   {
-    name: "Monitors",
-    items: [
-      {
-        id: 13,
-        name: "ASUS ROG Swift PG279QZ",
-        image:
-          "https://images.unsplash.com/photo-1593640408182-31174390f5d0?auto=format&fit=crop&w=400&q=80",
-        price: "$599.99",
-        detail:
-          "27'' 1440p IPS gaming monitor with 165Hz refresh rate, G-SYNC compatibility, and 1ms response time.",
-      },
-      {
-        id: 14,
-        name: "Alienware AW3423DWF",
-        image:
-          "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=400&q=80",
-        price: "$899.99",
-        detail:
-          "34'' ultrawide QD-OLED curved monitor with 165Hz, HDR400, and infinite contrast ratio.",
-      },
-      {
-        id: 15,
-        name: "LG 27GP850-B",
-        image:
-          "https://images.unsplash.com/photo-1616763355548-1b606f439f86?auto=format&fit=crop&w=400&q=80",
-        price: "$449.99",
-        detail:
-          "27'' 1440p Nano IPS gaming monitor with 180Hz refresh rate and HDR10 support.",
-      },
-      {
-        id: 16,
-        name: "Samsung Odyssey G7",
-        image:
-          "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80",
-        price: "$529.99",
-        detail:
-          "32'' curved 1440p QLED monitor with 240Hz, 1ms response time, and 1000R curvature.",
-      },
+    id: 4,
+    name: "Dell UltraSharp U2723QE",
+    category: "4K Monitors",
+    categoryIcon: <Monitor size={16} />,
+    price: 549.99,
+    originalPrice: 649.99,
+    rating: 4.5,
+    reviews: 892,
+    image:
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80",
+    brand: "Dell",
+    inStock: true,
+    discount: 15,
+    badges: ["Professional", "4K"],
+    features: [
+      '27" 4K IPS',
+      "USB-C Hub",
+      "Height Adjustable",
+      "3-Year Warranty",
     ],
+    specs: {
+      size: "27 inches",
+      resolution: "3840x2160",
+      panel: "IPS",
+      refreshRate: "60Hz",
+    },
   },
   {
-    name: "Mouse Pads",
-    items: [
-      {
-        id: 17,
-        name: "Corsair MM800 RGB Polaris",
-        image:
-          "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=400&q=80",
-        price: "$59.99",
-        detail:
-          "Hard surface RGB mouse pad with 15 RGB zones, wireless charging zone, and micro-textured surface.",
-      },
-      {
-        id: 18,
-        name: "Razer Goliathus Extended",
-        image:
-          "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=400&q=80",
-        price: "$39.99",
-        detail:
-          "Extended gaming mouse pad with optimized surface texture and anti-slip rubber base.",
-      },
-      {
-        id: 19,
-        name: "SteelSeries QcK Heavy",
-        image:
-          "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=400&q=80",
-        price: "$24.99",
-        detail:
-          "Thick cloth gaming mouse pad with consistent surface texture and durable stitched edges.",
-      },
-      {
-        id: 20,
-        name: "Logitech G840 XL",
-        image:
-          "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?auto=format&fit=crop&w=400&q=80",
-        price: "$49.99",
-        detail:
-          "Extra-large gaming surface with moderate surface friction for precise control and comfort.",
-      },
-    ],
+    id: 5,
+    name: "Razer DeathAdder V3 Pro",
+    category: "Gaming Mice",
+    categoryIcon: <Mouse size={16} />,
+    price: 149.99,
+    originalPrice: 159.99,
+    rating: 4.9,
+    reviews: 1547,
+    image:
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=400&q=80",
+    brand: "Razer",
+    inStock: false,
+    discount: 6,
+    badges: ["Pro Gaming", "Lightweight"],
+    features: ["Focus Pro 30K", "90hr Battery", "63g Weight", "Wireless"],
+    specs: {
+      sensor: "Focus Pro 30K",
+      dpi: "30,000 DPI",
+      weight: "63g",
+      battery: "90 hours",
+    },
   },
   {
-    name: "Speakers",
-    items: [
-      {
-        id: 21,
-        name: "Logitech G560 LIGHTSYNC",
-        image:
-          "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=400&q=80",
-        price: "$199.99",
-        detail:
-          "2.1 gaming speakers with RGB lighting that syncs with games, 240W peak power, and DTS:X Ultra.",
-      },
-      {
-        id: 22,
-        name: "Razer Nommo Pro",
-        image:
-          "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=400&q=80",
-        price: "$499.99",
-        detail:
-          "2.1 THX certified gaming speakers with dedicated subwoofer, Dolby Virtual Surround Sound.",
-      },
-      {
-        id: 23,
-        name: "Creative Pebble V3",
-        image:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-        price: "$59.99",
-        detail:
-          "Minimalist 2.0 USB-C desktop speakers with RGB lighting and 8W RMS total output.",
-      },
-      {
-        id: 24,
-        name: "Klipsch ProMedia 2.1",
-        image:
-          "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80",
-        price: "$149.99",
-        detail:
-          "THX-certified 2.1 computer speakers with 200W subwoofer and satellite control pod.",
-      },
+    id: 6,
+    name: "Blue Yeti USB Microphone",
+    category: "Microphones",
+    categoryIcon: <Mic size={16} />,
+    price: 89.99,
+    originalPrice: 109.99,
+    rating: 4.4,
+    reviews: 5673,
+    image:
+      "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=400&q=80",
+    brand: "Blue",
+    inStock: true,
+    discount: 18,
+    badges: ["Content Creation", "Studio Quality"],
+    features: [
+      "4 Pickup Patterns",
+      "Real-time Monitoring",
+      "Plug & Play",
+      "Mute Button",
     ],
-  },
-  {
-    name: "Webcams",
-    items: [
-      {
-        id: 25,
-        name: "Logitech StreamCam",
-        image:
-          "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=400&q=80",
-        price: "$149.99",
-        detail:
-          "1080p60 streaming webcam with auto-focus, smart exposure, and USB-C connectivity.",
-      },
-      {
-        id: 26,
-        name: "Razer Kiyo Pro",
-        image:
-          "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=400&q=80",
-        price: "$199.99",
-        detail:
-          "4K Pro webcam with adaptive light sensor, HDR, and wide-angle lens with auto-focus.",
-      },
-      {
-        id: 27,
-        name: "Elgato Facecam",
-        image:
-          "https://images.unsplash.com/photo-1628191081676-f3c36f6b9edb?auto=format&fit=crop&w=400&q=80",
-        price: "$179.99",
-        detail:
-          "Professional 1080p60 webcam with Sony sensor, fixed focus lens, and uncompressed video.",
-      },
-      {
-        id: 28,
-        name: "OBSBOT Tiny 4K",
-        image:
-          "https://images.unsplash.com/photo-1605648916319-cf5b7331e3a5?auto=format&fit=crop&w=400&q=80",
-        price: "$189.99",
-        detail:
-          "AI-powered 4K webcam with auto-tracking, gesture control, and gimbal stabilization.",
-      },
-    ],
-  },
-  {
-    name: "Controllers",
-    items: [
-      {
-        id: 29,
-        name: "Xbox Wireless Controller",
-        image:
-          "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?auto=format&fit=crop&w=400&q=80",
-        price: "$59.99",
-        detail:
-          "Latest Xbox controller with enhanced D-pad, textured grips, and Bluetooth connectivity.",
-      },
-      {
-        id: 30,
-        name: "PlayStation DualSense",
-        image:
-          "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=400&q=80",
-        price: "$69.99",
-        detail:
-          "PS5 controller with haptic feedback, adaptive triggers, and built-in microphone.",
-      },
-      {
-        id: 31,
-        name: "Razer Wolverine V2",
-        image:
-          "https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=400&q=80",
-        price: "$99.99",
-        detail:
-          "Pro gaming controller with remappable buttons, trigger stops, and Mecha-Tactile switches.",
-      },
-      {
-        id: 32,
-        name: "8BitDo SN30 Pro+",
-        image:
-          "https://images.unsplash.com/photo-1551954810-43cd6aef5b1f?auto=format&fit=crop&w=400&q=80",
-        price: "$49.99",
-        detail:
-          "Retro-styled wireless controller with motion controls, rumble, and 20-hour battery life.",
-      },
-    ],
+    specs: {
+      patterns: "4 (Cardioid, Omnidirectional, Bidirectional, Stereo)",
+      frequency: "20Hz-20kHz",
+      connectivity: "USB",
+      weight: "550g",
+    },
   },
 ];
 
-export default function GamingAccessoriesStore() {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const [selectedItem, setSelectedItem] = useState(null);
+const categories = [
+  {
+    name: "Gaming Keyboards",
+    icon: <Keyboard size={20} />,
+    count: 156,
+    color: "text-purple-500",
+  },
+  {
+    name: "Gaming Mice",
+    icon: <Mouse size={20} />,
+    count: 89,
+    color: "text-blue-500",
+  },
+  {
+    name: "Professional Mice",
+    icon: <Mouse size={20} />,
+    count: 67,
+    color: "text-green-500",
+  },
+  {
+    name: "Gaming Headsets",
+    icon: <Headphones size={20} />,
+    count: 134,
+    color: "text-red-500",
+  },
+  {
+    name: "4K Monitors",
+    icon: <Monitor size={20} />,
+    count: 78,
+    color: "text-indigo-500",
+  },
+  {
+    name: "Microphones",
+    icon: <Mic size={20} />,
+    count: 45,
+    color: "text-orange-500",
+  },
+  {
+    name: "Webcams",
+    icon: <Webcam size={20} />,
+    count: 32,
+    color: "text-pink-500",
+  },
+  {
+    name: "Speakers",
+    icon: <Speaker size={20} />,
+    count: 56,
+    color: "text-cyan-500",
+  },
+  {
+    name: "USB Hubs",
+    icon: <Usb size={20} />,
+    count: 23,
+    color: "text-yellow-500",
+  },
+  {
+    name: "Controllers",
+    icon: <Gamepad2 size={20} />,
+    count: 41,
+    color: "text-emerald-500",
+  },
+];
+
+const brands = [
+  "Corsair",
+  "Logitech",
+  "Razer",
+  "SteelSeries",
+  "Dell",
+  "ASUS",
+  "HyperX",
+  "Blue",
+  "Audio-Technica",
+];
+const sortOptions = [
+  { label: "Featured", value: "featured" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
+  { label: "Customer Rating", value: "rating" },
+  { label: "Newest First", value: "newest" },
+  { label: "Best Selling", value: "bestselling" },
+];
+
+export default function PCAccessoriesCatalog() {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filters, setFilters] = useState({
+    categories: [],
+    brands: [],
+    priceRange: [0, 1000],
+    inStock: false,
+    rating: 0,
+    discount: false,
+  });
+  const [viewMode, setViewMode] = useState("grid");
+  const [sortBy, setSortBy] = useState("featured");
+  const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredItems = selectedCategory.items.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    let filtered = products;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Category filter
+    if (filters.categories.length > 0) {
+      filtered = filtered.filter((product) =>
+        filters.categories.includes(product.category)
+      );
+    }
+
+    // Brand filter
+    if (filters.brands.length > 0) {
+      filtered = filtered.filter((product) =>
+        filters.brands.includes(product.brand)
+      );
+    }
+
+    // Price filter
+    filtered = filtered.filter(
+      (product) =>
+        product.price >= filters.priceRange[0] &&
+        product.price <= filters.priceRange[1]
+    );
+
+    // In stock filter
+    if (filters.inStock) {
+      filtered = filtered.filter((product) => product.inStock);
+    }
+
+    // Rating filter
+    if (filters.rating > 0) {
+      filtered = filtered.filter((product) => product.rating >= filters.rating);
+    }
+
+    // Discount filter
+    if (filters.discount) {
+      filtered = filtered.filter((product) => product.discount > 0);
+    }
+
+    // Sorting
+    switch (sortBy) {
+      case "price-asc":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        break;
+    }
+
+    setFilteredProducts(filtered);
+  }, [filters, sortBy, searchTerm]);
+
+  const toggleFilter = (type, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [type]: prev[type].includes(value)
+        ? prev[type].filter((item) => item !== value)
+        : [...prev[type], value],
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      categories: [],
+      brands: [],
+      priceRange: [0, 1000],
+      inStock: false,
+      rating: 0,
+      discount: false,
+    });
+    setSearchTerm("");
+  };
+
+  const ProductCard = ({ product, isListView = false }) => (
+    <div
+      className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group border border-gray-100 overflow-hidden ${
+        isListView ? "flex items-center p-4" : "flex flex-col"
+      }`}
+    >
+      {/* Product Image */}
+      <div
+        className={`relative ${
+          isListView ? "w-32 h-32 flex-shrink-0 mr-4" : "aspect-square"
+        } overflow-hidden ${!isListView && "rounded-t-2xl"}`}
+      >
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+
+        {/* Badges */}
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
+          {product.discount > 0 && (
+            <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+              -{product.discount}%
+            </span>
+          )}
+          {!product.inStock && (
+            <span className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+              Out of Stock
+            </span>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button className="p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-colors">
+            <Heart size={16} className="hover:text-red-500 transition-colors" />
+          </button>
+          <button className="p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-colors">
+            <Eye size={16} className="hover:text-blue-500 transition-colors" />
+          </button>
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div
+        className={`${
+          isListView ? "flex-1" : "p-4"
+        } flex flex-col justify-between h-full`}
+      >
+        <div>
+          {/* Category & Brand */}
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              {product.categoryIcon}
+              <span>{product.category}</span>
+            </div>
+            <span className="text-xs text-gray-400 font-medium">
+              {product.brand}
+            </span>
+          </div>
+
+          {/* Product Name */}
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+            {product.name}
+          </h3>
+
+          {/* Rating */}
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  size={14}
+                  className={`${
+                    i < Math.floor(product.rating)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm text-gray-600">
+              {product.rating} ({product.reviews})
+            </span>
+          </div>
+
+          {/* Features */}
+          {!isListView && (
+            <div className="flex flex-wrap gap-1 mb-3">
+              {product.features.slice(0, 3).map((feature, index) => (
+                <span
+                  key={index}
+                  className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full"
+                >
+                  {feature}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Price & Actions */}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-gray-900">
+                ${product.price}
+              </span>
+              {product.originalPrice > product.price && (
+                <span className="text-sm text-gray-500 line-through">
+                  ${product.originalPrice}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+              <Truck size={12} />
+              <span>Free shipping</span>
+            </div>
+          </div>
+
+          <button
+            disabled={!product.inStock}
+            className={`p-3 rounded-xl transition-all ${
+              product.inStock
+                ? "bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
+            <ShoppingCart size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Responsive filter drawer for mobile
+  const FilterDrawer = () => (
+    <div
+      className={`fixed inset-0 z-50 bg-black/40 flex lg:hidden ${
+        showFilters ? "visible" : "invisible"
+      }`}
+      onClick={() => setShowFilters(false)}
+    >
+      <div
+        className={`bg-white w-full max-w-xs h-full p-4 overflow-y-auto shadow-2xl transition-transform duration-300 ${
+          showFilters ? "translate-x-0" : "-translate-x-full"
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <Filter size={20} />
+            Filters
+          </h2>
+          <button
+            onClick={() => setShowFilters(false)}
+            className="text-gray-400 hover:text-gray-700"
+          >
+            <X size={24} />
+          </button>
+        </div>
+        <div className="space-y-6">
+          {/* Categories */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Categories</h3>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {categories.map((category, index) => (
+                <label
+                  key={index}
+                  className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={filters.categories.includes(category.name)}
+                    onChange={() => toggleFilter("categories", category.name)}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <div className={`${category.color}`}>{category.icon}</div>
+                  <span className="text-sm text-gray-700 flex-1">
+                    {category.name}
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    ({category.count})
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Price Range</h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={filters.priceRange[0]}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      priceRange: [
+                        parseInt(e.target.value) || 0,
+                        prev.priceRange[1],
+                      ],
+                    }))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <span className="text-gray-500">-</span>
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={filters.priceRange[1]}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      priceRange: [
+                        prev.priceRange[0],
+                        parseInt(e.target.value) || 1000,
+                      ],
+                    }))
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div className="text-sm text-gray-600">
+                ${filters.priceRange[0]} - ${filters.priceRange[1]}
+              </div>
+            </div>
+          </div>
+
+          {/* Brands */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Brands</h3>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {brands.map((brand, index) => (
+                <label
+                  key={index}
+                  className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={filters.brands.includes(brand)}
+                    onChange={() => toggleFilter("brands", brand)}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{brand}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Rating */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Rating</h3>
+            <div className="space-y-2">
+              {[4, 3, 2, 1].map((rating) => (
+                <label
+                  key={rating}
+                  className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                >
+                  <input
+                    type="radio"
+                    name="rating"
+                    checked={filters.rating === rating}
+                    onChange={() => setFilters((prev) => ({ ...prev, rating }))}
+                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                  />
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        className={`${
+                          i < rating
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                    <span className="text-sm text-gray-700 ml-2">& Up</span>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Other Filters */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">Other Filters</h3>
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+                <input
+                  type="checkbox"
+                  checked={filters.inStock}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      inStock: e.target.checked,
+                    }))
+                  }
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">In Stock Only</span>
+              </label>
+              <label className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+                <input
+                  type="checkbox"
+                  checked={filters.discount}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      discount: e.target.checked,
+                    }))
+                  }
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">On Sale</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={clearFilters}
+          className="mt-6 w-full px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors"
+        >
+          Clear All Filters
+        </button>
+      </div>
+    </div>
   );
 
   return (
-    <div className="min-h-scree bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            Gaming PC Accessories
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Elevate your gaming experience with premium peripherals
-          </p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="mb-8 flex justify-center">
-          <input
-            type="text"
-            placeholder="Search accessories..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-md px-4 py-3 rounded-lg bg-white border border-blue-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        {/* Category Buttons */}
-        <div className="flex gap-3 mb-8 justify-center flex-wrap">
-          {categories.map((cat) => (
-            <button
-              key={cat.name}
-              onClick={() => {
-                setSelectedCategory(cat);
-                setSelectedItem(null);
-                setSearchTerm("");
-              }}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                selectedCategory.name === cat.name
-                  ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg scale-105"
-                  : "bg-white border border-blue-200 text-blue-700 hover:bg-blue-50"
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-
-        {/* Items Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-all duration-300 p-6 cursor-pointer group hover:scale-105 shadow"
-              onClick={() => setSelectedItem(item)}
-            >
-              <div className="overflow-hidden rounded-lg mb-4">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                PC Accessories
+              </h1>
+              <p className="text-gray-600">
+                Showing {filteredProducts.length} of {products.length} products
+              </p>
+            </div>
+            {/* Controls */}
+            <div className="flex flex-col gap-3 w-full md:flex-row md:gap-4 md:w-auto">
+              {/* Search */}
+              <div className="relative w-full md:w-64">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 w-full rounded-xl border border-gray-300 shadow focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
                 />
               </div>
-              <h3 className="font-bold text-lg text-blue-900 mb-2 line-clamp-2">
-                {item.name}
-              </h3>
-              <div className="text-blue-500 font-bold text-xl mb-3">
-                {item.price}
-              </div>
-              <button className="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300">
-                View Details
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {filteredItems.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-blue-400 text-xl">
-              No items found matching "{searchTerm}"
-            </p>
-          </div>
-        )}
-
-        {/* Modal */}
-        {selectedItem && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white border border-blue-200 rounded-2xl p-8 max-w-md w-full shadow-2xl relative">
-              <button
-                className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 text-2xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-blue-50 transition-all duration-200"
-                onClick={() => setSelectedItem(null)}
+              {/* Sort */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 rounded-xl border border-gray-300 shadow text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-auto"
               >
-                ×
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {/* View Toggle */}
+              <div className="flex border border-gray-300 rounded-xl overflow-hidden shadow bg-white w-full md:w-auto">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 transition ${
+                    viewMode === "grid"
+                      ? "bg-blue-500 text-white"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  <Grid size={18} />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 transition ${
+                    viewMode === "list"
+                      ? "bg-blue-500 text-white"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  <List size={18} />
+                </button>
+              </div>
+              {/* Filter Toggle */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-500 text-white font-medium shadow hover:bg-blue-600 transition w-full md:w-auto"
+              >
+                <SlidersHorizontal size={18} />
+                Filters
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              <div className="text-center">
-                <div className="overflow-hidden rounded-lg mb-6">
-                  <img
-                    src={selectedItem.image}
-                    alt={selectedItem.name}
-                    className="w-full h-64 object-cover"
-                  />
+      {/* Mobile Filter Drawer */}
+      <FilterDrawer />
+
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Filters (desktop only) */}
+          <div
+            className={`hidden lg:block w-full lg:w-80 bg-white rounded-2xl p-6 h-fit sticky top-24 shadow-lg`}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                <Filter size={20} />
+                Filters
+              </h2>
+              <button
+                onClick={clearFilters}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Clear All
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {/* Categories */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Categories</h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {categories.map((category, index) => (
+                    <label
+                      key={index}
+                      className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.categories.includes(category.name)}
+                        onChange={() =>
+                          toggleFilter("categories", category.name)
+                        }
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <div className={`${category.color}`}>{category.icon}</div>
+                      <span className="text-sm text-gray-700 flex-1">
+                        {category.name}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        ({category.count})
+                      </span>
+                    </label>
+                  ))}
                 </div>
+              </div>
 
-                <h3 className="font-bold text-2xl text-blue-900 mb-3">
-                  {selectedItem.name}
+              {/* Price Range */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Price Range
                 </h3>
-
-                <div className="text-blue-500 font-bold text-3xl mb-4">
-                  {selectedItem.price}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.priceRange[0]}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          priceRange: [
+                            parseInt(e.target.value) || 0,
+                            prev.priceRange[1],
+                          ],
+                        }))
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <span className="text-gray-500">-</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.priceRange[1]}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          priceRange: [
+                            prev.priceRange[0],
+                            parseInt(e.target.value) || 1000,
+                          ],
+                        }))
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    ${filters.priceRange[0]} - ${filters.priceRange[1]}
+                  </div>
                 </div>
+              </div>
 
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  {selectedItem.detail}
-                </p>
+              {/* Brands */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Brands</h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {brands.map((brand, index) => (
+                    <label
+                      key={index}
+                      className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.brands.includes(brand)}
+                        onChange={() => toggleFilter("brands", brand)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">{brand}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-                <div className="flex gap-3">
-                  <button
-                    className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
-                    onClick={() => setSelectedItem(null)}
-                  >
-                    Add to Cart
-                  </button>
-                  <button
-                    className="px-6 py-3 bg-blue-50 text-blue-700 rounded-lg font-semibold hover:bg-blue-100 transition-all duration-300"
-                    onClick={() => setSelectedItem(null)}
-                  >
-                    Close
-                  </button>
+              {/* Rating */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Rating</h3>
+                <div className="space-y-2">
+                  {[4, 3, 2, 1].map((rating) => (
+                    <label
+                      key={rating}
+                      className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                    >
+                      <input
+                        type="radio"
+                        name="rating"
+                        checked={filters.rating === rating}
+                        onChange={() =>
+                          setFilters((prev) => ({ ...prev, rating }))
+                        }
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={14}
+                            className={`${
+                              i < rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                        <span className="text-sm text-gray-700 ml-2">& Up</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Other Filters */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Other Filters
+                </h3>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={filters.inStock}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          inStock: e.target.checked,
+                        }))
+                      }
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">In Stock Only</span>
+                  </label>
+                  <label className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={filters.discount}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          discount: e.target.checked,
+                        }))
+                      }
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">On Sale</span>
+                  </label>
                 </div>
               </div>
             </div>
           </div>
-        )}
+
+          {/* Products Grid */}
+          <div className="flex-1">
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Search size={48} className="mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No products found
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Try adjusting your filters or search terms
+                </p>
+                <button
+                  onClick={clearFilters}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            ) : (
+              <div
+                className={`grid gap-6 ${
+                  viewMode === "grid"
+                    ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+                    : "grid-cols-1"
+                }`}
+              >
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isListView={viewMode === "list"}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
