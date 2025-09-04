@@ -5,7 +5,6 @@ import {
   Server,
   Headphones,
   Settings,
-  User,
   Laptop,
 } from "lucide-react";
 

@@ -27,6 +27,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function PremiumNavbar() {
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
@@ -198,15 +199,17 @@ export default function PremiumNavbar() {
           <div className="flex items-center justify-between">
             {/* Enhanced Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Monitor className="text-white" size={24} />
-              </div>
-              <div className="text-2xl font-bold">
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  PC
-                </span>
-                <span className="text-gray-800"> Accessory</span>
-              </div>
+              <Link to="/" className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <Monitor className="text-white" size={24} />
+                </div>
+                <div className="text-2xl font-bold">
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    PC
+                  </span>
+                  <span className="text-gray-800"> Accessory</span>
+                </div>
+              </Link>
             </div>
 
             {/* Enhanced Search Bar */}
@@ -380,14 +383,14 @@ export default function PremiumNavbar() {
 
               {/* Navigation Links */}
               {[
-                { name: "Gaming", badge: "Hot" },
-                { name: "Professional", badge: null },
-                { name: "Deals", badge: "Sale" },
-                { name: "Support", badge: null },
+                { name: "Gaming", badge: "Hot", to: "/Gaming" },
+                { name: "Professional", badge: null, to: "/Professional" },
+                { name: "Deals", badge: "Sale", to: "/Deals" },
+                { name: "Support", badge: null, to: "/Support" },
               ].map((link, index) => (
-                <a
+                <Link
                   key={index}
-                  href="../../Gamming/Gamming/index.jsx"
+                  to={link.to}
                   className="relative flex items-center gap-2 px-4 py-2 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all font-medium group"
                 >
                   <span>{link.name}</span>
@@ -403,7 +406,7 @@ export default function PremiumNavbar() {
                     </span>
                   )}
                   <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -504,13 +507,14 @@ export default function PremiumNavbar() {
 
               {["Gaming", "Professional", "Deals", "Support"].map(
                 (item, index) => (
-                  <a
+                  <Link
                     key={index}
-                    href="#"
+                    to={`/${item}`}
                     className="block p-3 hover:bg-white rounded-lg transition-colors font-medium"
+                    onClick={() => setMobileMenu(false)}
                   >
                     {item}
-                  </a>
+                  </Link>
                 )
               )}
 
