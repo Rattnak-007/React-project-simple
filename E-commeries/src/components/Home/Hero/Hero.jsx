@@ -412,11 +412,11 @@ function ProductDetailModal({ product, isOpen, onClose, discount = false }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300"
+      className="fixed inset-0 bg-opacity-30 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+        className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -458,7 +458,7 @@ function ProductDetailModal({ product, isOpen, onClose, discount = false }) {
           </div>
 
           {/* Product Details */}
-          <div className="md:w-1/2 p-6 border-l md:border-l-gray-200">
+          <div className="md:w-1/2 p-6 rounded-lg border-l border-gray-200">
             <div className="mb-4">
               <h2 className="text-2xl font-bold text-gray-900">
                 {product.fullName || product.name}
@@ -786,7 +786,7 @@ function Carousel({ title, items, discount = false }) {
 
 export default function Hero() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 bg-gray-50 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 py-8 bg-white min-h-screen">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Tech Accessories Store
@@ -802,11 +802,6 @@ export default function Hero() {
       <div className="my-12 border-t border-gray-200"></div>
 
       <Carousel title="HOT DISCOUNTS" items={discounts} discount />
-
-      <div className="mt-16 text-center text-gray-500 text-sm">
-        <p>© 2023 TechGadget Store. All rights reserved.</p>
-      </div>
-
       <style>{`
         .scrollbar-hide {
           -ms-overflow-style: none;

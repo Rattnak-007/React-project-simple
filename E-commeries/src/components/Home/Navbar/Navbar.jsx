@@ -26,6 +26,7 @@ import {
   Star,
   Phone,
   MapPin,
+  PhoneCall,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -158,10 +159,16 @@ export default function PremiumNavbar() {
               <MapPin size={14} />
               <span className="text-xs">Phnom Penh, KH</span>
             </div>
+            <div className="flex items-center gap-1 hover:text-blue-400 transition-colors">
+              <PhoneCall size={14} />
+              <span className="text-xs">+855 78841050</span>
+            </div>
 
             <button className="flex items-center gap-1 hover:text-blue-400 transition-colors">
               <User size={16} />
-              <span className="hidden sm:inline">Account</span>
+              <span className="hidden sm:inline">
+                Telegram : @Chunrattnakvisal
+              </span>
             </button>
 
             <button className="relative flex items-center gap-1 hover:text-red-400 transition-colors group">
@@ -416,14 +423,6 @@ export default function PremiumNavbar() {
                 <Bell size={20} />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
               </button>
-
-              <button className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium">
-                Sign in
-              </button>
-
-              <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition-all font-semibold">
-                Sign up
-              </button>
             </div>
 
             {/* Mobile Controls */}
@@ -517,15 +516,6 @@ export default function PremiumNavbar() {
                   </Link>
                 )
               )}
-
-              <div className="flex gap-4 pt-4 border-t">
-                <button className="flex-1 py-3 text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-colors font-medium">
-                  Sign in
-                </button>
-                <button className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold">
-                  Sign up
-                </button>
-              </div>
             </div>
           </div>
         </div>

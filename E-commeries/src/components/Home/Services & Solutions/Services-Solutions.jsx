@@ -62,7 +62,7 @@ const services = [
 
 export default function ServicesSolutions() {
   return (
-    <section className="relative max-w-7xl mx-auto px-4 py-20">
+    <section className="relative bg-white max-w-7xl mx-auto px-4 py-20">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 -z-10" />
 

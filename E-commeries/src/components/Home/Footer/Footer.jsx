@@ -84,11 +84,11 @@ export default function Footer() {
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex items-center gap-2 hover:text-blue-400 transition">
                 <Mail size={16} />
-                <span>support@pcaccessory.com</span>
+                <span>rattnakvisalchun@gmail.com</span>
               </div>
               <div className="flex items-center gap-2 hover:text-blue-400 transition">
                 <Phone size={16} />
-                <span>+855 12 345 678</span>
+                <span>+855 78841050</span>
               </div>
               <div className="flex items-center gap-2 hover:text-blue-400 transition">
                 <MapPin size={16} />
